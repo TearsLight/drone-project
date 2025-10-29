@@ -3,95 +3,50 @@
 drone-project/                  # 项目根目录（所有模块的统一入口）
 
 ├── core/                       # C++核心模块（负责实时运算与硬件控制，优先级最高）
-
 │   ├── include/                # 头文件目录（定义数据结构、接口与依赖声明）
-
 │   │   ├── drone\_types.h       # 跨语言共享数据结构（如姿态角、电机指令、传感器数据等）
-
 │   │   └── comm.h              # 通信接口声明（共享内存、Socket等跨语言通信规范）
-
 │   ├── src/                    # C++源码目录（按功能拆分核心逻辑）
-
 │   │   ├── control/            # 控制算法模块（无人机稳定飞行核心）
-
 │   │   │   ├── pid.cpp         # PID控制器（姿态、位置闭环控制实现）
-
 │   │   │   └── estimator.cpp   # 姿态解算（IMU数据融合，如互补滤波/卡尔曼滤波）
-
 │   │   ├── drivers/            # 硬件驱动模块（直接操作底层硬件）
-
 │   │   │   ├── imu.cpp         # IMU传感器驱动（读取MPU-9250姿态数据）
-
 │   │   │   └── motor.cpp       # 电机控制驱动（输出PWM信号，控制无刷电调与电机）
-
 │   │   ├── comm/               # 通信实现模块（跨语言数据交互）
-
 │   │   │   ├── shm\_handler.cpp # 共享内存操作（高频数据如姿态角，低延迟传输）
-
 │   │   │   └── socket\_server.cpp # TCP服务端（接收Python/Java模块指令或数据）
-
 │   │   └── main.cpp            # C++主程序（初始化硬件、启动核心线程、调度任务）
-
 │   ├── CMakeLists.txt          # C++编译配置文件（指定依赖库、生成可执行文件\`core\_drone\`）
-
 │   └── lib/                    # C++依赖库目录（存放第三方静态/动态库，如wiringPi、boost、Protobuf）
-
 ├── python/                     # Python辅助模块（负责非实时性、快速开发场景）
-
 │   ├── vision/                 # 视觉处理模块（基于树莓派摄像头的图像分析）
-
 │   │   ├── detector.py         # 目标检测（如二维码定位、障碍物识别，调用OpenCV）
-
 │   │   └── socket\_client.py    # 视觉结果发送（通过TCP将目标坐标传给C++核心）
-
 │   ├── comm/                   # 通信客户端模块（与C++核心或外部设备交互）
-
 │   │   ├── mavlink\_ground.py   # 地面站通信（通过MAVLink协议与地面站传输飞行数据）
-
 │   │   └── shm\_reader.py       # 共享内存读取（从C++核心获取实时姿态数据，用于日志或显示）
-
 │   ├── utils/                  # 工具模块（通用辅助功能）
-
 │   │   ├── logger.py           # 日志记录（将飞行参数、传感器数据写入CSV或数据库）
-
 │   │   └── calibrate.py        # 传感器校准（IMU零漂校准、GPS定位校准等脚本）
-
 │   └── main.py                 # Python主程序（启动Python子模块、管理进程生命周期）
-
 ├── java/                       # Java模块（可选，负责跨平台服务与网络交互）
-
 │   ├── src/main/java/com/drone/ # Java源码目录（按包结构组织代码）
-
 │   │   ├── server/             # HTTP服务模块（提供远程控制接口）
-
 │   │   │   └── DroneServer.java # 远程控制服务（接收Web端或Android端指令）
-
 │   │   ├── comm/               # 通信客户端模块（与C++核心交互）
-
 │   │   │   └── TcpClient.java  # TCP客户端（将远程指令转发给C++核心）
-
 │   │   └── Main.java           # Java主程序（初始化HTTP服务、启动通信线程）
-
 │   └── pom.xml                 # Maven依赖配置文件（管理Java第三方库，如Jeromq、Spring Boot）
-
 ├── comm\_proto/                 # 公共通信协议目录（统一跨语言数据格式，避免兼容性问题）
-
 │   ├── msg.proto               # Protocol Buffers定义文件（压缩率高、多语言支持，定义所有跨模块消息格式）
-
 │   └── json\_schema/            # JSON数据结构模板（用于非实时性数据，如配置文件、日志格式）
-
 ├── config/                     # 全局配置目录（所有模块共享的配置文件，修改无需改代码）
-
 │   ├── params.yaml             # 飞行参数配置（PID参数、电机转速限制、传感器采样频率等）
-
 │   └── ipc\_config.json         # 跨进程通信配置（共享内存键值、Socket端口号、消息队列地址等）
-
 ├── scripts/                    # 部署与运维脚本目录（简化项目启动、编译、调试流程）
-
 │   ├── start\_all.sh            # 全模块启动脚本（按优先级启动：C++核心→Python→Java，避免依赖错误）
-
 │   └── build\_core.sh           # C++核心编译脚本（自动执行cmake、make，生成可执行文件）
-
 └── README.md                   # 项目说明文档（必看！包含环境配置、模块功能、启动步骤、调试指南）
 ```
 ## 项目材料
