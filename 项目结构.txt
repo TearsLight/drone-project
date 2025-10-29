@@ -1,0 +1,47 @@
+drone-project/
+├── core/                           # C++核心模块
+│   ├── include/                    # 头文件
+│   │   ├── drone_types.h           # 共享数据结构
+│   │   └── comm.h                  # 通信接口声明
+│   ├── src/
+│   │   ├── control/                # 控制算法
+│   │   │   ├── pid.cpp             # PID控制器
+│   │   │   └── estimator.cpp       # 姿态解算
+│   │   ├── drivers/                # 硬件驱动
+│   │   │   ├── imu.cpp             # IMU传感器驱动
+│   │   │   └── motor.cpp           # 电机控制
+│   │   ├── comm/                   # 通信实现
+│   │   │   ├── shm_handler.cpp     # 共享内存操作
+│   │   │   └── socket_server.cpp   # TCP服务端
+│   │   └── main.cpp                # C++主程序
+│   ├── CMakeLists.txt              # 编译配置
+│   └── lib/                        # 依赖库
+├── python/                         # Python辅助模块
+│   ├── vision/                     # 视觉处理
+│   │   ├── detector.py             # 目标检测
+│   │   └── socket_client.py        # 向C++发送视觉结果
+│   ├── comm/                       # 通信客户端
+│   │   ├── mavlink_ground.py       # 地面站MAVLink通信
+│   │   └── shm_reader.py           # 从共享内存读姿态数据
+│   ├── utils/
+│   │   ├── logger.py               # 日志记录
+│   │   └── calibrate.py            # 传感器校准
+│   └── main.py                     # Python主程序
+├── java/                           # Java模块
+│   ├── src/main/java/com/drone/
+│   │   ├── server/                 # HTTP服务
+│   │   │   └── DroneServer.java    # 接收远程控制指令
+│   │   ├── comm/
+│   │   │   └── TcpClient.java      # 向C++发送指令
+│   │   └── Main.java               # Java主程序
+│   ├── pom.xml                     # Maven依赖
+├── comm_proto/                     # 公共通信协议
+│   ├── msg.proto                   # Protocol Buffers定义
+│   └── json_schema/                # JSON数据结构模板
+├── config/                         # 全局配置
+│   ├── params.yaml                 # 飞行参数
+│   └── ipc_config.json             # 通信配置
+├── scripts/                        # 部署脚本
+│   ├── start_all.sh                # 启动所有模块
+│   └── build_core.sh               # 编译C++核心程序
+└── README.md                       # 多语言协作说明
